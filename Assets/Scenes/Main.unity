@@ -1244,9 +1244,10 @@ GameObject:
   - component: {fileID: 1574113310}
   - component: {fileID: 1574113311}
   - component: {fileID: 1574113312}
+  - component: {fileID: 1574113313}
   m_Layer: 0
   m_Name: Tank
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1318,6 +1319,22 @@ MonoBehaviour:
   turret: {fileID: 1229233250}
   muzzle: {fileID: 467443246}
   projectile: {fileID: 8679425476063349537, guid: ca431cbb7f1667e439f95f0218f4ce81, type: 3}
+--- !u!114 &1574113313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574113308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55db5aa4ba60104e9e80dde1d88c11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  damageFlashTime: 1
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  explosion: {fileID: 5014920019897803378, guid: 6b9ce7416c5751f439860c95f861fdd3, type: 3}
 --- !u!1 &1814872277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,7 +1487,7 @@ GameObject:
   - component: {fileID: 2145010707}
   m_Layer: 0
   m_Name: Tube
-  m_TagString: Untagged
+  m_TagString: Muzzle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

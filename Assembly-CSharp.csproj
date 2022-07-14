@@ -61,6 +61,8 @@
     <Compile Include="Assets\Scripts\PlayerControls.cs" />
     <Compile Include="Assets\Scripts\SpawnBlocks.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
+    <Compile Include="Assets\Scripts\Health.cs" />
+    <Compile Include="Assets\Scripts\DestroyAfterParticles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

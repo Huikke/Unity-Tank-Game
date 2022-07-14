@@ -35,7 +35,8 @@ public class PlayerControls : MonoBehaviour
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                Instantiate(projectile, muzzle.position, muzzle.rotation);
+                GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
+                proj.GetComponent<Projectile>().shooterTag = tag;
                 t = shootingCooldown;
             }
         }

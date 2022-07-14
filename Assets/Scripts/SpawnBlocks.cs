@@ -24,7 +24,7 @@ public class SpawnBlocks : MonoBehaviour
             Vector3 position = new Vector3(randomx, maxPoint.y + randomSize / 2, randomz);
             GameObject spawnedBlock = Instantiate(block, position, new Quaternion(), transform);
             spawnedBlock.transform.localScale *= randomSize;
-            
+            spawnedBlock.GetComponent<Health>().maxHealth = randomSize;
         }
     }
 
