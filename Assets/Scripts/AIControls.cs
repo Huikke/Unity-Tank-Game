@@ -8,20 +8,40 @@ public class AIControls : MonoBehaviour
     public float turningSpeed;
     public float turretTurningSpeed;
     public float shootingCooldown;
+    public float detectRange;
+    public float stoppingRange;
+    public float switchTargetDistance;
+    public float switchDistance;
+
+    public float AIDelay;
 
     public Transform turret;
     public Transform muzzle;
     public GameObject projectile;
 
+    public string stringState;
+
     private Rigidbody rb;
     private float t;
+    private float AIt;
 
     private GameObject targetObject;
     private Vector3 target;
 
+    private int obstacleMask;
+
+    private enum State { forward, left, right, back, stop };
+    private State state;
+    private State nextState;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        t = 0f;
+        AIt = 0f;
+        obstacleMask = LayerMask.GetMask("Obstacle");
+        state = State.forward;
+        nextState = State.forward;
     }
 
     void FixedUpdate()
@@ -39,21 +59,41 @@ public class AIControls : MonoBehaviour
             targetObject = GameObject.FindGameObjectWithTag("Player");
         }
 
-        // Liikutaan pelaajaa kohti
         float angle = Vector3.SignedAngle(transform.forward, target - transform.position, Vector3.up);
 
-        if(angle < 0)
+        // Tilakone
+        if (state == State.forward)
         {
-            Turning(-1f);
-        }
-        else if (angle > 0)
-        {
-            Turning(1f);
-        }
+            stringState = "forward";
+            if (angle < 0)
+            {
+                Turning(-1f);
+            }
+            else if (angle > 0)
+            {
+                Turning(1f);
+            }
 
-        if(Mathf.Abs(angle) < 90)
+            if (Mathf.Abs(angle) < 90)
+            {
+                Move(1f);
+            }
+        }
+        if (state == State.left)
         {
-            Move(1f);
+            stringState = "left";
+        }
+        if (state == State.right)
+        {
+            stringState = "right";
+        }
+        if (state == State.back)
+        {
+            stringState = "back";
+        }
+        if (state == State.stop)
+        {
+            stringState = "stop";
         }
     }
 
