@@ -52,14 +52,38 @@ public class AIControls : MonoBehaviour
         // Etsit‰‰n pelaaja
         if(targetObject != null)
         {
-            target = targetObject.transform.position;
+            if(Vector3.Distance(transform.position, targetObject.transform.position) < detectRange)
+            {
+                if(!Physics.Linecast(transform.position, targetObject.transform.position, obstacleMask))
+                {
+                    target = targetObject.transform.position;
+
+                    if (Vector3.Distance(target, transform.position) < stoppingRange)
+                    {
+                        nextState = State.stop;
+                    }
+                }
+            }
+
         }
         else
         {
             targetObject = GameObject.FindGameObjectWithTag("Player");
         }
 
+
+
         float angle = Vector3.SignedAngle(transform.forward, target - transform.position, Vector3.up);
+
+        if(AIt < 0)
+        {
+            state = nextState;
+            AIt = AIDelay;
+        }
+        else
+        {
+            AIt -= Time.deltaTime;
+        }
 
         // Tilakone
         if (state == State.forward)
@@ -82,18 +106,26 @@ public class AIControls : MonoBehaviour
         if (state == State.left)
         {
             stringState = "left";
+            Turning(-1f);
+            Move(1f);
         }
         if (state == State.right)
         {
             stringState = "right";
+            Turning(1f);
+            Move(1f);
         }
         if (state == State.back)
         {
             stringState = "back";
+            Move(-1f);
+            nextState = State.forward;
         }
         if (state == State.stop)
         {
             stringState = "stop";
+            Move(0f);
+            nextState = State.forward;
         }
     }
 
@@ -107,5 +139,54 @@ public class AIControls : MonoBehaviour
     {
         Vector3 turning = Vector3.up * input * turningSpeed;
         rb.angularVelocity = turning;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(!other.gameObject.CompareTag("Obstacle") && !other.gameObject.CompareTag("Wall"))
+        {
+            return;
+        }
+
+        RaycastHit leftHit;
+        RaycastHit rightHit;
+
+        float leftLength = 0f;
+        float rightLength = 0f;
+
+        if(Physics.Raycast(transform.position, transform.forward + transform.right * -1, out leftHit, Mathf.Infinity, obstacleMask))
+        {
+            leftLength = leftHit.distance;
+        }
+        if (Physics.Raycast(transform.position, transform.forward + transform.right, out rightHit, Mathf.Infinity, obstacleMask))
+        {
+            rightLength = rightHit.distance;
+        }
+
+        if(leftLength > rightLength)
+        {
+            state = State.left;
+            target = leftHit.point;
+        }
+        else
+        {
+            state = State.right;
+            target = rightHit.point;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        nextState = State.forward;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(!collision.gameObject.CompareTag("Obstacle") && !collision.gameObject.CompareTag("Wall"))
+        {
+            return;
+        }
+
+        state = State.back;
     }
 }
