@@ -46,6 +46,8 @@ public class AIControls : MonoBehaviour
 
     void FixedUpdate()
     {
+        t -= Time.deltaTime;
+
         Vector3 currentRotation = rb.rotation.eulerAngles;
         rb.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
 
@@ -65,6 +67,14 @@ public class AIControls : MonoBehaviour
                 if(!Physics.Linecast(transform.position, targetObject.transform.position, obstacleMask))
                 {
                     target = targetObject.transform.position;
+
+                    // Ampuminen
+                    if (t < 0)
+                    {
+                        GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
+                        proj.GetComponent<Projectile>().shooterTag = tag;
+                        t = shootingCooldown;
+                    }
 
                     if (Vector3.Distance(target, transform.position) < stoppingRange)
                     {
@@ -135,6 +145,11 @@ public class AIControls : MonoBehaviour
             Move(0f);
             nextState = State.forward;
         }
+
+        Vector3 targetDirection = target - turret.position;
+        targetDirection.y = 0f;
+        Vector3 turningDirection = Vector3.RotateTowards(turret.forward, targetDirection, turretTurningSpeed * Time.deltaTime, 0f);
+        turret.rotation = Quaternion.LookRotation(turningDirection);
     }
 
     private void Move(float input)
