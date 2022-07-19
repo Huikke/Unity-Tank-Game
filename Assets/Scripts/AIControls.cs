@@ -10,7 +10,7 @@ public class AIControls : MonoBehaviour
     public float shootingCooldown;
     public float detectRange;
     public float stoppingRange;
-    public float switchTargetDistance;
+    public float switchTargetRange;
     public float switchDistance;
 
     public float AIDelay;
@@ -49,6 +49,14 @@ public class AIControls : MonoBehaviour
         Vector3 currentRotation = rb.rotation.eulerAngles;
         rb.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
 
+        if(Vector3.Distance(transform.position, target) < switchTargetRange)
+        {
+            float randomx = Random.Range(-switchDistance, switchDistance);
+            float randomz = Random.Range(-switchDistance, switchDistance);
+
+            target += new Vector3(randomx, 0f, randomz);
+        }
+
         // Etsitään pelaaja
         if(targetObject != null)
         {
@@ -71,7 +79,7 @@ public class AIControls : MonoBehaviour
             targetObject = GameObject.FindGameObjectWithTag("Player");
         }
 
-
+        Debug.DrawLine(target, target + new Vector3(0f, 5f, 0f), Color.green);
 
         float angle = Vector3.SignedAngle(transform.forward, target - transform.position, Vector3.up);
 
