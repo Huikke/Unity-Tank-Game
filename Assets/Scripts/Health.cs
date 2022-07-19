@@ -15,6 +15,7 @@ public class Health : MonoBehaviour
     private float t;
 
     private MeshRenderer[] meshRenderers;
+    private bool dead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +30,14 @@ public class Health : MonoBehaviour
     {
         StartCoroutine(DamageFlash());
         currentHealth -= damage;
-        if(currentHealth <= 0)
+        if(currentHealth <= 0 && !dead)
         {
+            dead = true;
+            if (gameObject.CompareTag("Enemy"))
+            {
+                GameController.instance.EnemyDestroyed();
+            }
+
             Instantiate(explosion, transform.position, new Quaternion());
             Destroy(gameObject);
         }
