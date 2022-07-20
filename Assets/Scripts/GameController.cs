@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
 
     private GameObject player;
     public static GameController instance;
+    public UIController ui;
 
     private void Awake()
     {
@@ -35,21 +36,31 @@ public class GameController : MonoBehaviour
         score = 0f;
         currentLives = lives;
         currentEnemyAmount = enemyStartingAmount;
+        ui.SetScore(score);
+        ui.SetLives(currentLives, lives);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(currentLives > 0)
+        if (player == null)
         {
-            if (Input.GetButtonDown("Restart"))
+            if (currentLives > 0)
             {
-                if (player == null)
+                ui.ShowRespawnScreen();
+                if (Input.GetButtonDown("Restart"))
                 {
                     player = spawner.SpawnPlayer();
                     currentLives--;
+                    ui.SetLives(currentLives, lives);
+                    ui.HideRespawnScreen();
                 }
 
+            }
+            else
+            {
+                ui.ShowEndScreen(score);
             }
         }
     }
@@ -58,6 +69,7 @@ public class GameController : MonoBehaviour
     {
         spawner.SpawnEnemy();
         score += scorePerTank;
+        ui.SetScore(score);
         if(currentEnemyAmount < maxEnemiesAmount)
         {
             spawner.SpawnEnemy();
@@ -71,5 +83,6 @@ public class GameController : MonoBehaviour
         {
             current = 0f;
         }
+        ui.SetHealth(current, maxHealth);
     }
 }
