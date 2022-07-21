@@ -52,7 +52,7 @@ public class UIController : MonoBehaviour
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
         }
-        else
+        else if (!endScreen.activeInHierarchy)
         {
             pauseMenu.SetActive(true);
             Time.timeScale = 0f;

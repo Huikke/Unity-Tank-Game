@@ -19,6 +19,8 @@ public class AIControls : MonoBehaviour
     public Transform muzzle;
     public GameObject projectile;
 
+    public AudioSource audioSource;
+
     public string stringState;
 
     private Rigidbody rb;
@@ -71,6 +73,7 @@ public class AIControls : MonoBehaviour
                     // Ampuminen
                     if (t < 0)
                     {
+                        audioSource.Play();
                         GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
                         proj.GetComponent<Projectile>().shooterTag = tag;
                         t = shootingCooldown;

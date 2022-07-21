@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     private GameObject player;
     public static GameController instance;
     public UIController ui;
+    public AudioSource respawnAudio;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour
                 ui.ShowRespawnScreen();
                 if (Input.GetButtonDown("Restart"))
                 {
+                    respawnAudio.Play();
                     player = spawner.SpawnPlayer();
                     currentLives--;
                     ui.SetLives(currentLives, lives);
